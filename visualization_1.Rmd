@@ -1,0 +1,59 @@
+---
+title: "Visualization 1"
+author: "ruby"
+date: "2025-09-25"
+output: github_document
+---
+
+Load packages. 
+```{r setup, include = FALSE}
+library(tidyverse)
+library(ggridges)
+library(p8105.datasets)
+```
+
+Import the weather data 
+
+```{r}
+data("weather_df")
+```
+
+Making our first plot 
+
+```{r}
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+or you can use pipe to write this
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) + geom_point()
+```
+
+save plot 
+
+```{r}
+ggp_weather_scatterplot = 
+  weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) + geom_point()
+```
+
+check that some rows are missing. 
+
+```{r}
+weather_df |> 
+  filter(is.na(tmax))
+```
+
+## fancier scatterplots!
+naniar
+```{r}
+
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(se = FALSE)
+```
+
