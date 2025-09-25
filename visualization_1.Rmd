@@ -50,10 +50,166 @@ weather_df |>
 ## fancier scatterplots!
 naniar
 ```{r}
-
 weather_df |> 
-  ggplot(aes(x = tmin, y = tmax, color = name)) +
-  geom_point(alpha = 0.3) +
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point(aes(color = name, size = prcp), alpha = 0.3) +
   geom_smooth(se = FALSE)
 ```
 
+Use faceting (break the data into separate plots in rows and columns form)
+
+no rows ~ name by columns
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point(aes(color = name), alpha = 0.3, size = 0.8) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(. ~ name)
+
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_point(aes(color = name), alpha = 0.3, size = 0.8) +
+  geom_smooth(se = FALSE) + 
+  facet_grid(name ~ .)
+```
+
+Somewhat more interesting plot
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name, shape = name)) +
+  geom_point(aes(size = prcp), alpha = 0.3) +
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ name)
+```
+
+Learning Assessment: Write a code chain that starts with weather_df; focuses only on Central Park, converts temperatures to Fahrenheit, makes a scatterplot of min vs. max temperature, and overlays a linear regression line (using options in geom_smooth())
+
+```{r}
+weather_df |> 
+  filter(name == "CentralPark_NY") |> 
+  mutate(tminf = tmin * (9/5) + 32, 
+         tmaxf = tmax*(9/5) + 32
+         ) |> 
+  ggplot(aes(tminf, y = tmaxf)) +
+  geom_point() +
+  geom_smooth(se = FALSE, method = "lm")
+```
+
+## some other small things 
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name, shape = name)) +
+  # geom_point(alpha = 0.3) +
+  geom_smooth(se = FALSE) 
+
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax, color = name, shape = name)) +
+  geom_smooth(se = FALSE) +
+  geom_point()
+```
+
+```{r}
+weather_df |> 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_hex()
+```
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=tmin, y = tmax)) +
+  geom_point(color = "#99e") 
+```
+
+## univariate plots 
+
+color = border, fill = inside
+```{r}
+weather_df |> 
+  ggplot(aes(x=tmin)) +
+  geom_histogram(color = "white", fill = "blue")
+```
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=tmin, color = name)) +
+  geom_histogram()
+
+weather_df |> 
+  ggplot(aes(x=tmin, fill = name)) +
+  geom_histogram()
+```
+
+try faceting?
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=tmin, fill = name)) +
+  geom_histogram() +
+  facet_grid(name ~.)
+```
+
+a density plot
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=tmin, fill = name)) +
+  geom_density(alpha = 0.2) 
+```
+
+boxplot 
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=name, y = tmin)) +
+  geom_boxplot(aes(fill = name)) 
+```
+
+violin plots 
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=name, y = tmin, fill = name)) +
+  geom_violin()
+```
+
+ridge plot 
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=tmin, y = name, fill = name)) +
+  geom_density_ridges()
+```
+
+Learning Assessment: Make plots that compare precipitation across locations. Try a histogram, density plot, boxplot, violin plot, and a ridgeplot; use aesthetic mapping to make your visuals readable 
+
+```{r}
+weather_df |> 
+  ggplot(aes(x=prcp, fill = name)) +
+  geom_histogram() +
+  facet_grid(name ~ .)
+
+weather_df |> 
+  ggplot(aes(x=prcp, fill = name)) +
+  geom_density()
+
+weather_df |> 
+  filter(prcp > 5, prcp < 1000) |> 
+  ggplot(aes(x=prcp, fill = name)) +
+  geom_density(alpha = 0.2)
+
+
+```
+
+
+##misc notes 
+
+mapping vs setting the aesthetic 
+
+mapping is in the aes 
+- mapping by the variable 
+e.g. changing a color for each name/category
+
+setting outside of aes is for the entire figure
