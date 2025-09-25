@@ -203,6 +203,25 @@ weather_df |>
 
 ```
 
+##saving and embedding plots 
+
+saving plots 
+
+```{r}
+ggp_weather_violin = weather_df |> 
+  ggplot(aes(x=name, y = tmin, fill = name)) +
+  geom_violin()
+
+ggsave("plots/violin_plot.pdf", ggp_weather_violin, 
+       width = 8, height = 6)
+
+```
+
+embedding plots 
+
+```{r, fig.width = 6, fig.height = 4}
+ggp_weather_violin 
+```
 
 ##misc notes 
 

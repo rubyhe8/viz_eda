@@ -378,6 +378,33 @@ weather_df |>
 
 ![](visualization_1_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->
 
+\##saving and embedding plots
+
+saving plots
+
+``` r
+ggp_weather_violin = weather_df |> 
+  ggplot(aes(x=name, y = tmin, fill = name)) +
+  geom_violin()
+
+ggsave("plots/violin_plot.pdf", ggp_weather_violin, 
+       width = 8, height = 6)
+```
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_ydensity()`).
+
+embedding plots
+
+``` r
+ggp_weather_violin 
+```
+
+    ## Warning: Removed 17 rows containing non-finite outside the scale range
+    ## (`stat_ydensity()`).
+
+![](visualization_1_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
 \##misc notes
 
 mapping vs setting the aesthetic
