@@ -1,0 +1,6 @@
+---
+title: "visualization_2"
+author: "ruby"
+date: "2025-09-30"
+output: html_document
+---
