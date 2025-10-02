@@ -1,0 +1,11 @@
+---
+title: "eda"
+author: "ruby"
+date: "2025-10-02"
+output: html_document
+---
+
+```{r}
+
+```
+
