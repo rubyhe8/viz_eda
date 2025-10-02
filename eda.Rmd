@@ -195,3 +195,29 @@ weather_df |>
   filter(change_rank < 2)
 ```
 
+## revisit pulse dataset 
+```{r}
+pulse_df = 
+  haven::read_sas("data/public_pulse_data.sas7bdat") |> 
+  janitor::clean_names() |> 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi"
+  ) |> 
+  mutate(visit = fct_inorder(visit))
+
+pulse_df |> 
+  ggplot(aes(x = visit, y = bdi)) +
+  geom_boxplot()
+
+pulse_df |> 
+  group_by(visit) |> 
+  summarize(
+    median_bdi = median(bdi, na.rm = TRUE), 
+    mean_bdi = mean(bdi, na.rm = TRUE)
+  ) |> 
+  knitr::kable(digits = 2)
+```
+
