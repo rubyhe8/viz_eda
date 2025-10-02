@@ -137,3 +137,61 @@ weather_df |>
   knitr::kable(digits = 2)
 ```
 
+## mutate with groups 
+
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE), 
+    center_tmax = tmax - mean_tmax
+  ) |> 
+  ggplot(aes(x = date, y = center_tmax, color = name)) +
+  geom_point()
+```
+
+look for cold days. 
+
+```{r}
+weather_df |> 
+  group_by(name, month) |> 
+  mutate(temp_rank = min_rank(tmax)) |> 
+  filter(temp_rank < 2)
+```
+
+in central park in jan of 2021, the tmax is 4.4 -> 14th coldest day in jan 2021 in central park 
+
+what about lags? (is todays tmax related to yesterdays?)
+-> the order of the dataset matters in this case 
+
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(lagged_tmax = lag(tmax))
+```
+
+use the variables you create 
+
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(
+    temp_change = tmax-lag(tmax)
+  ) |> 
+  summarize(
+    sd_tmax_change = sd(temp_change, na.rm = TRUE),
+    tmax_change_max = max(temp_change, na.rm = TRUE)
+  )
+```
+
+to see on which day is temp change the largest in each location 
+```{r}
+weather_df |> 
+  group_by(name) |> 
+  mutate(
+    temp_change = tmax-lag(tmax), 
+    change_rank = min_rank(desc(temp_change))
+  ) |> 
+  filter(change_rank < 2)
+```
+
